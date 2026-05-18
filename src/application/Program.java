@@ -2,7 +2,9 @@ package application;
 
 import java.util.Scanner;
 
+import chess.ChessException;
 import chess.ChessMatch;
+
 
 public class Program {
 
@@ -13,6 +15,7 @@ public class Program {
 
 		while (true) {
 			try {
+				UI.clearScreen();
 				UI.printBoard(chessMatch.getPieces());
 				System.out.println();
 				System.out.print("Source: ");
@@ -22,8 +25,13 @@ public class Program {
 				chess.ChessPosition target = UI.readChessPosition(sc);
 				chess.ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
 			}
-			catch (RuntimeException e) {
+			catch (ChessException e) {
 				System.out.println(e.getMessage());
+				sc.nextLine();
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
 			}
 		}
 	}
