@@ -1,10 +1,13 @@
 package chess;
 
+import java.util.List;
+
 import boardgame.Board;
 import chess.pieces.King;
 import chess.pieces.Rook;
 import boardgame.Position;
 import boardgame.Piece;
+import java.util.ArrayList;
 
 
 public class ChessMatch {
@@ -12,6 +15,9 @@ public class ChessMatch {
     private int turn;
     private Color currentPlayer;
     private Board board;
+
+    private List<ChessPiece> piecesOnTheBoard = new ArrayList<>();
+    private List<ChessPiece> capturedPieces = new ArrayList<>();
 
     public ChessMatch() {
         board = new Board(8, 8);
@@ -50,6 +56,7 @@ public class ChessMatch {
         validateSourcePosition(sourcePos);
         validateTargetPosition(sourcePos, targetPos);
         Piece capturedPiece = makeMove(sourcePos, targetPos);
+        capturedPieces.add((ChessPiece) capturedPiece);
         nextTurn();
         return (ChessPiece) capturedPiece;
     }
@@ -58,6 +65,10 @@ public class ChessMatch {
         Piece p = board.removePiece(source);
         Piece capturedPiece = board.removePiece(target);
         board.placePiece(p, target);
+            if (capturedPiece != null) {
+                piecesOnTheBoard.remove(capturedPiece);
+                capturedPieces.add((ChessPiece) capturedPiece);
+            }
         return capturedPiece;
     }
 
@@ -86,6 +97,7 @@ public class ChessMatch {
 
     private void placeNewPiece(char column, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
+        piecesOnTheBoard.add(piece);
     }
 
     private void initialSetup() {
